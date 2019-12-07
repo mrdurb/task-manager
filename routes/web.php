@@ -12,7 +12,5 @@
 */
 
 Route::get('/', function () {
-    return view('layout');
+    return view('welcome');
 });
-
-// Route::get('/', 'TasksController@index');

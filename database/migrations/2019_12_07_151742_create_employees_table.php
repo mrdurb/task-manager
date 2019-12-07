@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePerformersTable extends Migration
+class CreateEmployeesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreatePerformersTable extends Migration
      */
     public function up()
     {
-        Schema::create('performers', function (Blueprint $table) {
+        Schema::create('employees', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('Имя');
-            $table->string('Должность');
+            $table->string('name');
+            $table->string('position');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreatePerformersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('performers');
+        Schema::dropIfExists('employees');
     }
 }
