@@ -12,5 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('employee');
 });
+
+Route::resource('employee', 'EmployeeController');
+
+Route::post('employee/update', 'EmployeeController@update')->name('employee.update');
+
+Route::get('employee/destroy/{id}', 'EmployeeController@destroy');
