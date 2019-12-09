@@ -20,10 +20,27 @@
                 <a class="nav-link" href="#" id="taskTable">Задачи</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="#" id="employeeTable">Исполнители</a>
+                <a class="nav-link " href="#" id="employeeTable">Исполнители</a>
             </li>
         </ul>
         @yield('employees_table')
+        @yield('tasks_table')
     </div>
+
+<script>
+    $(document).ready(function() {
+        $('#taskTable').addClass("active");
+    });
+    $('#taskTable').click(function() {
+        $(this).addClass("active");
+        $('#employeeTable').removeClass("active");
+        window.location.replace("http://127.0.0.1:8000/tasks");
+    });
+    $('#employeeTable').click(function() {
+        $(this).addClass("active");
+        $('#taskTable').removeClass("active");
+        window.location.replace("http://127.0.0.1:8000/employees");
+    });
+</script>
 </body>
 </html>

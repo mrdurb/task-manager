@@ -35,7 +35,7 @@
 <script>
     var addEmployeeModal = new jBox('Modal', {
         attach: '#addEmployee',
-        title: '<h4>Добавить исполнителя</h2>',
+        title: '<h4>Добавить исполнителя</h4>',
         content: `  <div class="input-group input-group-lg mb-4">
                         <div class="input-group-prepend">
                             <span class="input-group-text">Имя</span>
