@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Task;
 use Illuminate\Http\Request;
 
+
 class TaskController extends Controller
 {
     /**
@@ -15,7 +16,8 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::all();
-        return view('tasks.index', compact('tasks'));
+        $employees = Task::employees();
+        return view('tasks.index', compact('tasks'), compact('employees'));
     }
 
     /**
@@ -36,7 +38,15 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $task = new Task();
+
+        $task->title = request('title');
+        $task->employee = request('employee');
+        $task->status = request('status');
+
+        $task->save();
+
+        return redirect('/tasks');
     }
 
     /**
@@ -54,9 +64,11 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(int $id)
+    public function edit(Task $task)
     {
-        
+        $employees = Task::employees();
+
+        return view('tasks.edit', compact('task'), compact('employees'));
     }
 
     /**
@@ -65,9 +77,16 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Task $task)
     {
+        $task->title = request('title');
+        $task->employee = request('employee');
+        $task->status = request('status');
+
+        $task->save();
+
         
+        return redirect('/tasks');
     }
 
     /**
@@ -75,8 +94,10 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(Task $task)
     {
+        $task->delete();
 
+        return redirect('/tasks');
     }
 }

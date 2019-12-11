@@ -16,7 +16,7 @@
         </div>
         <input type="text" class="form-control" name="position" value="{{ $employee->position }}" required>
     </div>
-    <button class="btn btn-danger float-right" onclick="window.location.replace('http://127.0.0.1:8000/employees')">Отмена</button>
+    <a class="btn btn-danger float-right text-white" onclick="window.location.replace('http://127.0.0.1:8000/employees')">Отмена</a>
     <button class="btn btn-success float-right mr-1" type="submit">Сохранить</button>
 </form>
 @endsection

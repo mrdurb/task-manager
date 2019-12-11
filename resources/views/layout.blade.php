@@ -26,6 +26,7 @@
         @yield('employees_table')
         @yield('tasks_table')
         @yield('editEmployee')
+        @yield('editTask')
     </div>
 
 <script>
