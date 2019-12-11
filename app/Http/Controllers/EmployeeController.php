@@ -36,7 +36,14 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        
+        $employee = new Employee();
+
+        $employee->name = request('name');
+        $employee->position = request('position');
+
+        $employee->save();
+
+        return redirect('/employees');
     }
 
     /**
@@ -46,7 +53,7 @@ class EmployeeController extends Controller
      */
     public function show()
     {
-        //
+
     }
 
     /**
@@ -54,20 +61,29 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(int $id)
+    public function edit(Employee $employee)
     {
-        
+        // $employee = Employee::findOrFail($id);
+
+        return view('employees.edit', compact('employee'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Employee $employee)
     {
+        // $employee = Employee::findOrFail($id);
+
+        $employee->name = request('name');
+        $employee->position = request('position');
+
+        $employee->save();
+
         
+        return redirect('/employees');
     }
 
     /**
@@ -75,8 +91,10 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(int $id)
+    public function destroy(Employee $employee)
     {
+        $employee->delete();
 
+        return redirect('/employees');
     }
 }

@@ -20,16 +20,33 @@
                 <a class="nav-link" href="#" id="taskTable">Задачи</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " href="#" id="employeeTable">Исполнители</a>
+                <a class="nav-link" href="#" id="employeeTable">Исполнители</a>
             </li>
         </ul>
         @yield('employees_table')
         @yield('tasks_table')
+        @yield('editEmployee')
     </div>
 
 <script>
     $(document).ready(function() {
-        $('#taskTable').addClass("active");
+        var cat = '{{ Request::path() }}';
+        if( cat.includes('tasks'))
+            $('#taskTable').addClass("active");
+        else
+            $('#employeeTable').addClass("active");
+        // $('#employeeForm').on('submit', function(e) {
+        //     e.preventDefault();
+        //     console.log("check");
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: '/employees',
+        //         data: '',
+        //         success: function (response) {
+        //             alert("Success!");
+        //         }
+        //     });
+        // });
     });
     $('#taskTable').click(function() {
         $(this).addClass("active");

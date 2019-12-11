@@ -15,6 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('employees', 'EmployeeController');
+Route::get('/employees', 'EmployeeController@index');
+Route::post('/employees', 'EmployeeController@store');
+Route::get('/employees/{employee}/edit', 'EmployeeController@edit');
+Route::put('/employees/{employee}/', 'EmployeeController@update');
+Route::get('/employees/{employee}/delete', 'EmployeeController@destroy');
 
-Route::resource('tasks', 'TaskController');
+
+Route::get('/tasks', 'TaskController@index');
+
+
