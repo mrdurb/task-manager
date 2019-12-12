@@ -19,12 +19,12 @@ Route::get('/employees',                    'EmployeeController@index');
 Route::post('/employees',                   'EmployeeController@store');
 Route::get('/employees/{employee}/edit',    'EmployeeController@edit');
 Route::put('/employees/{employee}/',        'EmployeeController@update');
-Route::get('/employees/{employee}/delete',  'EmployeeController@destroy');
+Route::delete('/employees/{employee}',      'EmployeeController@destroy');
 
 Route::get('/tasks',                'TaskController@index');
 Route::post('/tasks',               'TaskController@store');
 Route::get('/tasks/{task}/edit',    'TaskController@edit');
 Route::put('/tasks/{task}/',        'TaskController@update');
-Route::get('/tasks/{task}/delete',  'TaskController@destroy');
+Route::delete('/tasks/{task}',      'TaskController@destroy');
 
 

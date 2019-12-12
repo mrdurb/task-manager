@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Employee;
 use Illuminate\Http\Request;
+use Response;
 
 class EmployeeController extends Controller
 {
@@ -15,6 +16,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = Employee::all();
+        
         return view('employees.index', compact('employees'));
     }
 
@@ -36,14 +38,9 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        $employee = new Employee();
+        $employee = Employee::create($request->all());
 
-        $employee->name = request('name');
-        $employee->position = request('position');
-
-        $employee->save();
-
-        return redirect('/employees');
+        return Response::json($employee);
     }
 
     /**
@@ -63,8 +60,6 @@ class EmployeeController extends Controller
      */
     public function edit(Employee $employee)
     {
-        // $employee = Employee::findOrFail($id);
-
         return view('employees.edit', compact('employee'));
     }
 
@@ -75,7 +70,6 @@ class EmployeeController extends Controller
      */
     public function update(Employee $employee)
     {
-        // $employee = Employee::findOrFail($id);
 
         $employee->name = request('name');
         $employee->position = request('position');
@@ -91,10 +85,10 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $employee)
+    public function destroy($id)
     {
-        $employee->delete();
+        $employee = Employee::destroy($id);
 
-        return redirect('/employees');
+        return Response::json($employee);
     }
 }
