@@ -36,7 +36,7 @@
 <script>
     $(document).ready(function() {
         var cat = '{{ Request::path() }}';
-        if( cat.includes('tasks'))
+        if( !cat.includes('employees'))
             $('#taskTable').addClass("active");
         else
             $('#employeeTable').addClass("active");

@@ -27,7 +27,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employees.create');
+        
     }
 
     /**
@@ -38,6 +38,12 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+
+        request()->validate([
+            'name' => 'required',
+            'position' => 'required'
+        ]);
+
         $employee = Employee::create($request->all());
 
         return Response::json($employee);

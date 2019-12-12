@@ -28,7 +28,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return view('tasks.create');
+        
     }
 
     /**
@@ -39,6 +39,13 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
+
+        request()->validate([
+            'title' => 'required',
+            'employee' => 'required',
+            'status' => 'required'
+        ]);
+
         $task = Task::create($request->all());
 
         return Response::json($task);

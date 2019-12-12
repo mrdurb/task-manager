@@ -40,17 +40,22 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Имя</span>
                             </div>
-                            <input type="text" name="name" class="form-control" required />
+                            <input type="text" name="name" class="form-control" value="{{ old('name') }}" />
                         </div>
                         <div class="input-group input-group-lg mb-4">
                             <div class="input-group-prepend">
                                 <span class="input-group-text">Должность</span>
                             </div>
-                            <input type="text" name="position" class="form-control" required />
+                            <input type="text" name="position" class="form-control" value="{{ old('position') }}" />
                         </div>
                         <button class="btn btn-danger float-right" onclick="addEmployeeModal.close();" type="button">Отмена</button>
-                        <button class="btn btn-success float-right mr-1" type="button" id="btn-save" onclick="formSave(window.event);">Сохранить</button>
+                        <button class="btn btn-success float-right mr-1" type="submit" id="btn-save" onclick="formSave(window.event);">Сохранить</button>
                     </form>`
+    });
+
+    var addConfirm = new jBox('Modal', {
+        title: '<h4>Исполнитель добавлен!</h4>',
+        content: `<button class="btn btn-success float-right mr-1" type="button" onclick="addConfirm.close();">ОК</button>`
     });
 
     function formSave(e) {  
@@ -83,9 +88,14 @@
                 $('#employees_table').append(employee);
                 $('#employeeForm').trigger("reset");
                 addEmployeeModal.close();
+                addConfirm.open();
             },
             error: function (data) {
-                console.log('Error:', data);
+                if (data.responseJSON.errors.name)
+                    $('input[name = "name"]').addClass('border-danger');
+                if (data.responseJSON.errors.position)
+                    $('input[name = "position"]').addClass('border-danger');
+                console.log('Error:', data.responseJSON.errors);
             }
         });
     }; 

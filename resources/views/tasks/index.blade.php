@@ -72,48 +72,55 @@
                     </form>`
     });
 
-    function formSave(e) {  
-        if ($('select[name = "employee"]').val() == "") {
-            $('select[name = "employee"]').addClass('border-danger');
-        }
-        else {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-            e.preventDefault();
-            taskData = {
-                title: $('input[name = "title"]').val(),
-                employee: $('select[name = "employee"]').val(),
-                status: $('select[name = "status"]').val(),
-            };
-            $.ajax({
-                type:       'POST',
-                url:        'tasks',
-                data:       taskData,
-                dataType:   'json',
+    var addConfirm = new jBox('Modal', {
+        title: '<h4>Задача добавлена!</h4>',
+        content: `<button class="btn btn-success float-right mr-1" type="button" onclick="addConfirm.close();">ОК</button>`
+    });
 
-                success: function (data) {  
-                    task = `<tr id="task_${data.id}">
-                                    <td>${data.id}</td>
-                                    <td>${data.title}</td>
-                                    <td>${data.employee}</td>
-                                    <td>${data.status}</td>
-                                    <td>
-                                        <button class="btn btn-primary" id="editTask" onclick="window.location.replace('http://127.0.0.1:8000/tasks/${data.id}/edit')">Редактировать</button>
-                                        <button class="btn btn-danger delete-link" onclick="formDelete(${data.id});">Удалить</button>
-                                    </td>
-                                </tr>`
-                    $('#tasks_table').append(task);
-                    $('#taskForm').trigger("reset");
-                    addTaskModal.close();
-                },
-                error: function (data) {
-                    console.log('Error:', data);
+    function formSave(e) {  
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+        e.preventDefault();
+        taskData = {
+            title: $('input[name = "title"]').val(),
+            employee: $('select[name = "employee"]').val(),
+            status: $('select[name = "status"]').val(),
         };
+        $.ajax({
+            type:       'POST',
+            url:        'tasks',
+            data:       taskData,
+            dataType:   'json',
+
+            success: function (data) {  
+                task = `<tr id="task_${data.id}">
+                                <td>${data.id}</td>
+                                <td>${data.title}</td>
+                                <td>${data.employee}</td>
+                                <td>${data.status}</td>
+                                <td>
+                                    <button class="btn btn-primary" id="editTask" onclick="window.location.replace('http://127.0.0.1:8000/tasks/${data.id}/edit')">Редактировать</button>
+                                    <button class="btn btn-danger delete-link" onclick="formDelete(${data.id});">Удалить</button>
+                                </td>
+                            </tr>`
+                $('#tasks_table').append(task);
+                $('#taskForm').trigger("reset");
+                addTaskModal.close();
+                addConfirm.open();
+            },
+            error: function (data) {
+                if (data.responseJSON.errors.title)
+                    $('input[name = "title"]').addClass('border-danger');
+                if (data.responseJSON.errors.employee)
+                    $('select[name = "employee"]').addClass('border-danger');
+                if (data.responseJSON.errors.status)
+                    $('select[name = "status"]').addClass('border-danger');
+                console.log('Error:', data.responseJSON.errors);
+            }
+        });
     }; 
 
     function formDelete(id) {

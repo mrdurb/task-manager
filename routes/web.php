@@ -11,16 +11,13 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/employees',                    'EmployeeController@index');
 Route::post('/employees',                   'EmployeeController@store');
 Route::get('/employees/{employee}/edit',    'EmployeeController@edit');
 Route::put('/employees/{employee}/',        'EmployeeController@update');
 Route::delete('/employees/{employee}',      'EmployeeController@destroy');
 
+Route::get('/',                     'TaskController@index');
 Route::get('/tasks',                'TaskController@index');
 Route::post('/tasks',               'TaskController@store');
 Route::get('/tasks/{task}/edit',    'TaskController@edit');
