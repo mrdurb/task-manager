@@ -5,7 +5,7 @@
     <table id="tasks_table" class="table table-bordered">
         <thead>
             <tr>
-                <th>id</th>
+                <th>test</th>
                 <th>Название</th>
                 <th>Исполнитель</th>
                 <th>Статус</th>
