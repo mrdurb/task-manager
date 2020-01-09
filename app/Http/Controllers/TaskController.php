@@ -70,7 +70,7 @@ class TaskController extends Controller
     {
         $employees = Task::employees();
 
-        return view('tasks.edit', compact('task'), compact('employees'));
+        return Response::json($task);
     }
 
     /**
@@ -83,12 +83,12 @@ class TaskController extends Controller
     {
         $task->title = request('title');
         $task->employee = request('employee');
+        $task->employee_id = request('employee_id');
         $task->status = request('status');
 
         $task->save();
 
-        
-        return redirect('/tasks');
+        return Response::json($task);
     }
 
     /**

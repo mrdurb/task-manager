@@ -8,6 +8,7 @@
                 <th>id</th>
                 <th>Имя</th>
                 <th>Должность</th>
+                <th>Задачи</th>
                 <th>Действие</th>
             </tr>
         </thead>
@@ -17,6 +18,15 @@
                 <td>{{ $employee->id }}</td>
                 <td>{{ $employee->name }}</td>
                 <td>{{ $employee->position }}</td>
+                <td>
+                    <ul class="list-group">
+                        @forelse ($employee->tasks as $task)
+                            <li class="list-group-item">{{ $task->title }}</li>
+                        @empty
+                            <li class="list-group-item">Задач нет</li>
+                        @endforelse
+                    </ul>
+                </td>
                 <td>
                     <button class="btn btn-primary" id="editEmployee" onclick="window.location.replace('http://127.0.0.1:8000/employees/{{$employee->id}}/edit')">Редактировать</button>
                     <button class="btn btn-danger delete-link" onclick="formDelete('{{ $employee->id }}');">Удалить</button>
