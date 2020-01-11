@@ -20,12 +20,14 @@
                 <td>{{ $task->employee }}</td>
                 <td>{{ $task->status }}</td>
                 <td>
-                    <button class="btn btn-primary" id="editTask" onclick="window.location.replace('http://127.0.0.1:8000/tasks/{{$task->id}}/edit')">Редактировать</button>
+                    <button class="btn btn-primary" id="editTask" onclick="formGetTask('{{ $task->id }}');">Редактировать</button>
                     <button class="btn btn-danger delete-link" onclick="formDelete('{{ $task->id }}');">Удалить</button>
                 </td>
             </tr>
             @empty
-            
+            <tr>
+                <td>Задач нет</td>
+            </tr>
             @endforelse
         </tbody>
     </table>
@@ -49,11 +51,11 @@
                                 <span class="input-group-text">Исполнитель</span>
                             </div>
                             <select name="employee" class="custom-select" required >
-                                <option selected value>Выберите сотрудника</option>
+                                <option value>Выберите сотрудника</option>
                                 @forelse($employees as $employee)
-                                    <option value="{{ $employee->name }}">{{ $employee->name }}</option>
+                                    <option value="{{ $employee->name }} {{ $employee->id }}">{{ $employee->name }}</option>
                                 @empty
-                                    <option selected value>Никого нет</option>
+                                    <option value>Никого нет</option>
                                 @endforelse
                             </select>
                         </div>
@@ -77,6 +79,8 @@
         content: `<button class="btn btn-success float-right mr-1" type="button" onclick="addConfirm.close();">ОК</button>`
     });
 
+    var editTaskModal;
+
     function formSave(e) {  
         $.ajaxSetup({
             headers: {
@@ -86,7 +90,8 @@
         e.preventDefault();
         taskData = {
             title: $('input[name = "title"]').val(),
-            employee: $('select[name = "employee"]').val(),
+            employee: $('select[name = "employee"]').val().split(' ')[0],
+            employee_id: $('select[name = "employee"]').val().split(' ')[1],
             status: $('select[name = "status"]').val(),
         };
         $.ajax({
@@ -102,7 +107,7 @@
                                 <td>${data.employee}</td>
                                 <td>${data.status}</td>
                                 <td>
-                                    <button class="btn btn-primary" id="editTask" onclick="window.location.replace('http://127.0.0.1:8000/tasks/${data.id}/edit')">Редактировать</button>
+                                    <button class="btn btn-primary" id="editTask" onclick="formGetTask(${data.id});">Редактировать</button>
                                     <button class="btn btn-danger delete-link" onclick="formDelete(${data.id});">Удалить</button>
                                 </td>
                             </tr>`
@@ -122,6 +127,111 @@
             }
         });
     }; 
+
+    function formGetTask(id) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.ajax({
+            type:   'GET',
+            url:    `/tasks/${id}/edit`,
+            
+            success: function (data) {
+                editTaskModal = new jBox('Modal', {
+                    title: '<h4>Редактировать задачу</h4>',
+                    content: `  <form id="taskForm" class="editForm">
+                                    <div class="input-group input-group-lg mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Название</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="title" value="${data.title}" required />
+                                    </div>
+                                    <div class="input-group input-group-lg mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Исполнитель</span>
+                                        </div>
+                                        <select name="employee" class="custom-select" required >
+                                            <option selected value>Выберите сотрудника</option>
+                                            @forelse($employees as $employee)
+                                                <option value="{{ $employee->name }} {{ $employee->id }}">{{ $employee->name }}</option>
+                                            @empty
+                                                <option value>Никого нет</option>
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                    <div class="input-group input-group-lg mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Статус</span>
+                                        </div>
+                                        <select name="status" class="custom-select" value="${data.status}" required>
+                                            <option value="Открыта">Открыта</option>
+                                            <option value="В работе">В работе</option>
+                                            <option value="Завершена">Завершена</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-danger float-right mt-3" onclick="editTaskModal.destroy();" type="button">Отмена</button>
+                                    <button class="btn btn-success float-right mr-1 mt-3" type="button" id="btn-save" onclick="formEditSave(window.event, ${data.id}, 'PUT');">Сохранить</button>
+                                </form>`,
+                    closeOnEsc: false,
+                    closeOnClick: false, 
+                    closeOnMouseleave: false,
+                    closeButton: false
+                });
+                editTaskModal.open();
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
+    };
+
+    function formEditSave(e, id, method) {  
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        e.preventDefault();
+        taskData = {
+            title: $('input[name = "title"]').val(),
+            employee: $('select[name = "employee"]').val().split(' ')[0],
+            employee_id: $('select[name = "employee"]').val().split(' ')[1],
+            status: $('select[name = "status"]').val(),
+        };
+        $.ajax({
+            type:       method,
+            url:        `/tasks/${id}/`,
+            data:       taskData,
+            dataType:   'json',
+
+            success: function (data) {  
+                task = `<tr id="task_${data.id}">
+                                <td>${data.id}</td>
+                                <td>${data.title}</td>
+                                <td>${data.employee}</td>
+                                <td>${data.status}</td>
+                                <td>
+                                    <button class="btn btn-primary" id="editTask" onclick="formGetTask(${data.id});">Редактировать</button>
+                                    <button class="btn btn-danger delete-link" onclick="formDelete(${data.id});">Удалить</button>
+                                </td>
+                            </tr>`
+                $(`#task_${data.id}`).replaceWith(task);
+                $('#taskForm').trigger("reset");
+                editTaskModal.destroy();
+            },
+            error: function (data) {
+                if (data.responseJSON.errors.title)
+                    $('input[name = "title"]').addClass('border-danger');
+                if (data.responseJSON.errors.employee)
+                    $('select[name = "employee"]').addClass('border-danger');
+                if (data.responseJSON.errors.status)
+                    $('select[name = "status"]').addClass('border-danger');
+                console.log('Error:', data.responseJSON.errors);
+            }
+        });
+    };
 
     function formDelete(id) {
         $.ajaxSetup({

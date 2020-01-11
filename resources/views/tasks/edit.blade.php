@@ -33,7 +33,7 @@
             <option value="Завершена">Завершена</option>
         </select>
     </div>
-    <a class="btn btn-danger float-right text-white" onclick="window.location.replace('http://127.0.0.1:8000/tasks')">Отмена</a>
+    <a class="btn btn-danger float-right text-white" href="/tasks">Отмена</a>
     <button class="btn btn-success float-right mr-1" type="submit">Сохранить</button>
 </form>
 @endsection

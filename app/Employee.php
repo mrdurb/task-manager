@@ -9,4 +9,8 @@ class Employee extends Model
     protected $fillable = [
         'name', 'position'
     ];
+
+    public function tasks() {
+        return $this->hasMany('App\Task');
+    }
 }

@@ -21,16 +21,15 @@
     <div class="container">
         <ul class="nav nav-tabs mt-5">
             <li class="nav-item">
-                <a class="nav-link" href="#" id="taskTable">Задачи</a>
+                <a class="nav-link" href="/tasks" id="taskTable">Задачи</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" id="employeeTable">Исполнители</a>
+                <a class="nav-link" href="/employees" id="employeeTable">Исполнители</a>
             </li>
         </ul>
         @yield('employees_table')
         @yield('tasks_table')
         @yield('editEmployee')
-        @yield('editTask')
     </div>
 
 <script>
@@ -40,12 +39,6 @@
             $('#taskTable').addClass("active");
         else
             $('#employeeTable').addClass("active");
-    });
-    $('#taskTable').click(function() {
-        window.location.replace("http://127.0.0.1:8000/tasks");
-    });
-    $('#employeeTable').click(function() {
-        window.location.replace("http://127.0.0.1:8000/employees");
     });
 </script>
 </body>
