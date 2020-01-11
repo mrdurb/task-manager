@@ -20,13 +20,14 @@
                 <td>{{ $task->employee }}</td>
                 <td>{{ $task->status }}</td>
                 <td>
-                <!-- onclick="window.location.replace('http://127.0.0.1:8000/tasks/{{$task->id}}/edit')" -->
                     <button class="btn btn-primary" id="editTask" onclick="formGetTask('{{ $task->id }}');">Редактировать</button>
                     <button class="btn btn-danger delete-link" onclick="formDelete('{{ $task->id }}');">Удалить</button>
                 </td>
             </tr>
             @empty
-            
+            <tr>
+                <td>Задач нет</td>
+            </tr>
             @endforelse
         </tbody>
     </table>
@@ -206,7 +207,6 @@
             dataType:   'json',
 
             success: function (data) {  
-                $(`#task_${data.id}`).remove();
                 task = `<tr id="task_${data.id}">
                                 <td>${data.id}</td>
                                 <td>${data.title}</td>
@@ -217,7 +217,7 @@
                                     <button class="btn btn-danger delete-link" onclick="formDelete(${data.id});">Удалить</button>
                                 </td>
                             </tr>`
-                $('#tasks_table').append(task);
+                $(`#task_${data.id}`).replaceWith(task);
                 $('#taskForm').trigger("reset");
                 editTaskModal.destroy();
             },
